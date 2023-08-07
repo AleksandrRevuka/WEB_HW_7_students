@@ -9,6 +9,9 @@ packages = [{include = "web_hw_6_sql"}]
 [tool.poetry.dependencies]
 python = "^3.11"
 faker = "^19.2.0"
+sqlalchemy = "^2.0.19"
+psycopg2-binary = "^2.9.6"
+alembic = "^1.11.2"
 
 [tool.poetry.group.dev.dependencies]
 ipython = "^8.14.0"
@@ -26,3 +29,8 @@ build-backend = "poetry.core.masonry.api"
 
 [mypy]
 dmypyExecutable = "/home/alex/python_projects/WEB_HW_6_SQL/.venv/bin/dmypy"
+
+[tool.mypy]
+exclude = [
+    "/home/alex/python_projects/WEB_HW_7_students/alembic/"
+]
