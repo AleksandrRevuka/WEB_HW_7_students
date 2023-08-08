@@ -17,10 +17,10 @@ def select_1():
         func.round(func.avg(Journal.gread), 4).label('average_grade')
     ).group_by(Journal.student_id).subquery()
 
-    result = session.query(Student, subquery.c.average_grade).\
-        join(subquery, Student.id == subquery.c.student_id).\
-        order_by(subquery.c.average_grade.desc()).\
-        limit(5).all()
+    result = session.query(Student, subquery.c.average_grade)\
+        .join(subquery, Student.id == subquery.c.student_id)\
+        .order_by(subquery.c.average_grade.desc())\
+        .limit(5).all()
         
     for student, average_grade in result:
         print(f"Student ID: {student.id}, Student: {student.student}, Average Grade: {average_grade}")
@@ -119,11 +119,45 @@ def select_10():
         .join(Teacher, StudentTeacher.teacher_id == Teacher.id) \
         .filter(Teacher.teacher == "James Watkins", Student.student == "Richard Hunt")
         
-
     for subject_name in result:
         print(f"Subject Name: {subject_name[0]}")
+        
+        
+def select_11():
+    subquery = session.query(
+        Journal.student_id,
+        func.round(func.avg(Journal.gread), 4).label('average_grade')
+    ).group_by(Journal.student_id).subquery()
 
+    result = session.query(Student, subquery.c.average_grade)\
+        .join(subquery, Student.id == subquery.c.student_id)\
+        .order_by(subquery.c.average_grade.desc())\
+        .filter(Teacher.teacher == "Cynthia Clark", Student.student == "Brian Tate")
+    
+    for student, average_grade in result:
+        print(f"Student ID: {student.id}, Student: {student.student}, Average Grade: {average_grade}")
+       
+
+def select_12():
+    subquery = session.query(
+        Journal.student_id,
+        func.max(Journal.gread_date).label("max_gread_date")
+    ).filter(
+        Subject.subject_name == "Computer Science",
+        Group.group_name == "TL-05"
+    ).group_by(Journal.student_id).subquery()
+    
+    query = session.query(Student, Journal.gread, Journal.gread_date) \
+        .join(subquery, subquery.c.student_id == Student.id) \
+        .join(Journal, (Journal.student_id == subquery.c.student_id) \
+            & (Journal.gread_date == subquery.c.max_gread_date))
+    
+    for student, gread, gread_date in query:
+        print(f"Student ID: {student.id}, Student: {student.student}, Gread: {gread}, Grade date: {gread_date}")
+        
 if __name__ == "__main__":
+    """_summary_
+    """    
     select_1()
     select_2()
     select_3()
@@ -134,3 +168,5 @@ if __name__ == "__main__":
     select_8()
     select_9()
     select_10()
+    select_11()
+    select_12()
