@@ -11,19 +11,18 @@ from models import (Student,
                     StudentSubject)
 
 
-
 def select_1():
     subquery = session.query(
         Journal.student_id,
         func.round(func.avg(Journal.gread), 4).label('average_grade')
     ).group_by(Journal.student_id).subquery()
 
-    top_5_students = session.query(Student, subquery.c.average_grade).\
+    result = session.query(Student, subquery.c.average_grade).\
         join(subquery, Student.id == subquery.c.student_id).\
         order_by(subquery.c.average_grade.desc()).\
         limit(5).all()
         
-    for student, average_grade in top_5_students:
+    for student, average_grade in result:
         print(f"Student ID: {student.id}, Student: {student.student}, Average Grade: {average_grade}")
     
     

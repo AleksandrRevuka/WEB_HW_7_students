@@ -27,10 +27,13 @@ rich = "^13.4.2"
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
-[mypy]
-dmypyExecutable = "/home/alex/python_projects/WEB_HW_6_SQL/.venv/bin/dmypy"
-
 [tool.mypy]
 exclude = [
     "/home/alex/python_projects/WEB_HW_7_students/alembic/"
 ]
+
+[tool.ruff]
+line-length=130
+
+[mypy]
+dmypyExecutable = "/home/alex/python_projects/WEB_HW_6_SQL/.venv/bin/dmypy"
